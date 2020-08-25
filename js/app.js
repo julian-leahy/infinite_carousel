@@ -11,6 +11,7 @@ let offset = slideW;
 let autoplayTimer;
 
 
+
 // add a duplicate of the first img to the end of slide pack
 // after transitioning to this slide we can jump back to
 // the actual first slide without transition
@@ -19,12 +20,15 @@ const img1 = document.createElement('img');
 img1.src = startImgSrc;
 slider.appendChild(img1);
 
+slider.addEventListener('mouseover', () => clearInterval(autoplayTimer))
+
+slider.addEventListener('mouseout', () => autoplayTimer = setInterval(startAutoplay, delay))
+
+
 const startAutoplay = () => {
-    setTimeout(() => {
-        slider.style.transition = 'transform .7s ease-in-out';
-        slider.style.transform = 'translateX(-' + offset + 'px)'
-        offset += slideW;
-    }, delay);
+    slider.style.transition = 'transform .7s ease-in-out';
+    slider.style.transform = 'translateX(-' + offset + 'px)'
+    offset += slideW;
 }
 
 slider.addEventListener('transitionend', () => {
@@ -34,7 +38,8 @@ slider.addEventListener('transitionend', () => {
         slider.style.transform = 'translateX(-' + offset + 'px)'
         offset += slideW;
     }
-    startAutoplay();
 })
 
-if (autoplay) startAutoplay();
+if (autoplay) {
+    autoplayTimer = setInterval(startAutoplay, delay)
+}
